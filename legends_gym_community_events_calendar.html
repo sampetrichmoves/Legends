@@ -1,0 +1,861 @@
+
+<style>
+* { box-sizing: border-box; }
+.page { padding: 16px 0; max-width: 900px; }
+h1 { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+.subtitle { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px; }
+.nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.nav-btn { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); color: var(--color-text-secondary); font-size: 12px; cursor: pointer; transition: all .15s; }
+.nav-btn:hover { border-color: var(--color-border-primary); color: var(--color-text-primary); }
+.nav-btn.active { background: #7F77DD; border-color: #7F77DD; color: #fff; }
+.month-card { border: 1px solid var(--color-border-tertiary); border-radius: 12px; overflow: hidden; }
+.month-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--color-border-tertiary); }
+.month-badge { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.month-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+.month-theme { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
+.section { padding: 16px 20px; border-bottom: 1px solid var(--color-border-tertiary); }
+.section:last-child { border-bottom: none; }
+.tabs { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+.tab { padding: 5px 12px; border-radius: 6px; border: 1px solid var(--color-border-tertiary); background: transparent; color: var(--color-text-secondary); font-size: 12px; cursor: pointer; transition: all .15s; }
+.tab.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-secondary); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.event-box { background: var(--color-background-secondary); border-radius: 8px; padding: 14px 16px; margin-bottom: 8px; }
+.event-name { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.event-date { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 8px; }
+.event-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+.event-bullets { margin: 8px 0 0; padding-left: 0; list-style: none; }
+.event-bullets li { font-size: 13px; color: var(--color-text-secondary); padding: 3px 0; }
+.event-bullets li:before { content: "→ "; color: var(--color-text-tertiary); }
+.post-box { background: var(--color-background-secondary); border-radius: 8px; padding: 14px 16px; }
+.platform-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
+.ig-label { color: #C13584; }
+.fb-label { color: #1877F2; }
+.em-label { color: #0F6E56; }
+.bl-label { color: #534AB7; }
+.post-text { font-size: 13px; color: var(--color-text-primary); line-height: 1.65; white-space: pre-wrap; }
+.visual-hint { font-size: 12px; color: var(--color-text-tertiary); margin-top: 8px; font-style: italic; }
+.copy-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--color-border-tertiary); background: var(--color-background-primary); color: var(--color-text-secondary); font-size: 11px; cursor: pointer; margin-top: 10px; transition: all .15s; }
+.copy-btn:hover { border-color: #7F77DD; color: #7F77DD; }
+.copy-btn.copied { border-color: #0F6E56; color: #0F6E56; }
+.email-subject { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--color-border-tertiary); }
+.blog-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
+.blog-outline { font-size: 13px; color: var(--color-text-secondary); line-height: 1.65; }
+</style>
+
+<div class="page">
+  <h1>Legends Gym — Community Events Calendar</h1>
+  <p class="subtitle">12 months of real community events that bring people through the door · Copy-paste ready for IG, FB, Email & Blog</p>
+  <div class="nav" id="monthNav"></div>
+  <div id="monthContent"></div>
+</div>
+
+<script>
+const months = [
+  {
+    name:"January", icon:"🎉", color:"#E85D24", bg:"#FAECE7",
+    theme:"New Year Kickoff Party",
+    event:{
+      name:"New Year Kickoff Party + Community WOD",
+      date:"January 11 (Saturday) — All Day",
+      desc:"Kick off the year with a massive community celebration at the gym. Open to everyone — members bring their people. Music, food, energy, and a group workout that gets the whole crowd moving together. This is about making Legends the place to be on the first big Saturday of the year.",
+      bullets:[
+        "Free community WOD open to all — beginner-friendly, high energy",
+        "Music, food spread, and a party atmosphere in and around the gym",
+        "Members each invite 1–2 friends to join the fun",
+        "Group photo wall — tag Legends and your crew",
+        "Coaches mingling and leading mini movement demos throughout the day",
+        "\"Wall of Intentions\" — everyone writes their 2026 goal on a sticky and adds it to the board"
+      ]
+    },
+    ig:{
+      caption:`🎉 NEW YEAR. NEW LEGENDS.\n\nWe're kicking off 2026 the only way we know how — together.\n\nJanuary 11 is our New Year Kickoff Party at Legends. Community WOD, good music, good food, and the best people in Murrieta all under one roof.\n\nBring your crew. This is open to everyone — members, friends, neighbors, anyone who wants to start 2026 surrounded by people who show up.\n\n📍 Legends Gym | January 11 | 9am–1pm\n\nTag someone who needs to be here 👇\n\n#LegendsGym #NewYearKickoff #CommunityWOD #Murrieta #NewYearParty #FitnessFamily #StartStrong`,
+      visual:"Reel of coaches and members hyping up the event, party setup, group WOD energy"
+    },
+    fb:{
+      caption:`🎉 LEGENDS NEW YEAR KICKOFF PARTY — January 11\n\nWe're starting 2026 with a bang and we want the whole community here.\n\nJoin us for:\n🏋️ Community WOD (all fitness levels welcome)\n🎵 Music and party vibes all morning\n🍕 Food spread after the workout\n📸 Group photo wall — write your 2026 goal and add it to our Wall of Intentions\n\nThis is free, open to all, and the most fun Saturday you'll have all month.\n\nMembers — bring your people. Non-members — come see what Legends is all about.\n\n📍 Legends Gym | January 11 | 9am–1pm\n\nComment "I'M IN" and we'll add you to the reminder list 👊`,
+      visual:"Event cover graphic with party/fitness theme, Wall of Intentions preview"
+    },
+    email:{
+      subject:"The biggest party of January is at Legends — January 11 🎉",
+      body:`Hi [First Name],
+
+We could start 2026 quietly. Or we could do what Legends does.
+
+We're throwing a New Year Kickoff Party on January 11 and the whole community is invited.
+
+Here's what's happening:
+• Community WOD — beginner-friendly, all levels, let's MOVE
+• Music, food, and party atmosphere all morning
+• Wall of Intentions — write your 2026 goal and add it to the board
+• Group photos, coaches, good people everywhere
+
+This is open to everyone. Bring your partner, your neighbor, your friend who keeps saying they want to get fit. This is their invitation in human form.
+
+📍 Legends Gym | January 11 | 9am–1pm
+
+RSVP so we know how much food to order 👉 [RSVP LINK]
+
+Let's make 2026 legendary.
+
+— The Legends Team`
+    },
+    blog:{
+      title:"Why Starting Your Fitness Year With Community Changes Everything",
+      outline:"The science of social momentum — why group starts outperform solo resolutions. What a community WOD actually feels like for a first-timer. How Legends members describe the culture. The Wall of Intentions tradition and why writing goals publicly works. What to expect when you walk through our doors for the first time. CTA: January 11 Kickoff."
+    }
+  },
+  {
+    name:"February", icon:"❤️", color:"#D4537E", bg:"#FBEAF0",
+    theme:"Bring a Friend Month",
+    event:{
+      name:"Bring a Friend Weekend",
+      date:"February 14–15 (Valentine's Weekend)",
+      desc:"The whole weekend is designed around bringing someone new through the door. No gimmicks — just members inviting the people they care about to share something that's changed their life. Couples, best friends, siblings, coworkers. Everyone is welcome to come experience a real Legends class alongside a member.",
+      bullets:[
+        "Every member brings 1 friend to any class that weekend — free guest pass",
+        "Post-class social hour Saturday afternoon — snacks, meet the coaches, hang out",
+        "\"Dynamic Duo\" partner workout both days — designed so any fitness level can participate",
+        "Photo booth setup — matching 'Sweat Date' frames for partners and friend groups",
+        "Coaches share personal stories about who brought them into fitness"
+      ]
+    },
+    ig:{
+      caption:`❤️ BRING A FRIEND WEEKEND — February 14 & 15\n\nSomebody brought you into something great once. Return the favor.\n\nThis Valentine's weekend, every Legends member gets to bring 1 friend to any class — free, no strings. Just two people doing something real together.\n\nPartner WODs. Post-class hangout. Photo booth. Good vibes.\n\nTag the person you're bringing 👇 They'll thank you later.\n\n📍 Legends Gym | Feb 14–15\nAll class times available — check bio for schedule 🔗\n\n#BringAFriend #LegendsGym #SweatDate #Murrieta #ValentinesFitness #PartnerWOD #FitnessFamily`,
+      visual:"Partner workout reel, photo booth setup, coaches with their 'person who brought them in' story"
+    },
+    fb:{
+      caption:`❤️ BRING A FRIEND WEEKEND at Legends — Feb 14 & 15\n\nThink about the person who changed your life by introducing you to something good. This weekend, you be that person.\n\nEvery member brings 1 guest to any class FREE all weekend long.\n\nWe're running partner WODs both days — designed so any fitness level can join in and have a blast.\n\nSaturday afternoon we're hosting a post-class social. Snacks, music, coaches, community.\n\nTag your person below. Plans are made. Let's go.\n\n📍 Legends Gym | February 14–15 | All class times`,
+      visual:"Valentine's weekend event graphic, partner workout photos, social hour setup"
+    },
+    email:{
+      subject:"Bring someone you love to Legends this weekend ❤️",
+      body:`Hi [First Name],
+
+Valentine's weekend, we're doing something simple.
+
+Bring someone you care about to Legends.
+
+Bring a Friend Weekend runs February 14 and 15. Every member gets to bring 1 guest to any class, any time. No forms, no process — just show up together.
+
+We're running partner WODs both days, and Saturday afternoon there's a post-class social — snacks, music, and the kind of conversation that happens when good people gather after a hard workout.
+
+Who needs to experience what you've experienced here?
+
+Text them right now. Show up together this weekend.
+
+[VIEW CLASS SCHEDULE]
+
+See you Saturday.
+
+— Legends Gym`
+    },
+    blog:{
+      title:"The Person Who Brought You In: Why Community Is the Secret to Fitness That Lasts",
+      outline:"Research on social accountability in fitness. The 'invited member' vs self-signup retention gap. Stories from Legends members about how they were introduced. How to be the person who invites someone. What Bring a Friend Weekend looks like at Legends. CTA: February 14–15."
+    }
+  },
+  {
+    name:"March", icon:"☘️", color:"#3B6D11", bg:"#EAF3DE",
+    theme:"Spring Community Cookout",
+    event:{
+      name:"Spring Cookout + Outdoor Community WOD",
+      date:"March 21 (Saturday)",
+      desc:"Take the energy outside for the first big outdoor event of the year. Public outdoor workout in the parking lot or a nearby park, followed by a full cookout. This is a neighborhood moment — invite the whole community. Members bring their families. Kids welcome. Make Legends a name every family in Murrieta knows.",
+      bullets:[
+        "Public outdoor group workout — two sessions, all fitness levels",
+        "Full BBQ cookout after — members, guests, and families welcome",
+        "Kids' activity area — small obstacle course or fun drills for the little ones",
+        "Lawn games after the workout (cornhole, spike ball, etc.)",
+        "Local vendor or food truck partner invited",
+        "\"Legends Family\" photos — best group photo wins a feature on the page"
+      ]
+    },
+    ig:{
+      caption:`🌿 SPRING COOKOUT AT LEGENDS — March 21\n\nWork hard. Eat together. That's the plan.\n\nMarch 21 we're taking it outside for a community workout followed by a full cookout. Members, families, neighbors, kids — everyone is welcome at this one.\n\nTwo workout sessions in the morning. Grill fired up by noon.\n\nThis is the Legends community at its best.\n\n📍 Legends Gym | March 21 | Workouts 8am & 10am | Cookout from noon\n\nBring your family. Bring your appetite. Tag who's coming 🙌\n\n#SpringCookout #LegendsGym #Murrieta #CommunityEvent #OutdoorWorkout #FamilyFitness #BBQ`,
+      visual:"Outdoor workout teaser, cookout setup, family-friendly vibe photos"
+    },
+    fb:{
+      caption:`🌿 LEGENDS SPRING COOKOUT — March 21\n\nSpring is here and we're celebrating outside.\n\nJoin us for:\n🏋️ Outdoor community WOD — 8am and 10am (all fitness levels)\n🍔 Full BBQ cookout from noon\n👶 Kids activity area\n🎯 Lawn games and hangout time\n\nBring your whole family. Bring your neighbors. This is a community event — not just a gym event.\n\nFree to attend. Free to bring as many people as you want.\n\n📍 Legends Gym + Parking Lot | March 21\n\nShare this with every Murrieta family you know 🔁`,
+      visual:"Spring event graphic, outdoor setting, family-friendly imagery"
+    },
+    email:{
+      subject:"Burpees then burgers — Spring Cookout at Legends, March 21 🌿",
+      body:`Hi [First Name],
+
+We have a simple plan for March 21.
+
+Work hard in the morning. Eat together at noon.
+
+Legends Spring Cookout is an outdoor community day for members, families, neighbors, and anyone who wants to be part of something good.
+
+Morning sessions: 8am and 10am outdoor WODs (all fitness levels, come as you are)
+Noon onwards: Full BBQ cookout, lawn games, kids activities
+
+Bring your partner. Bring your kids. Bring your neighbor who's always curious about what happens at Legends.
+
+No RSVP needed — just show up.
+
+[GET THE ADDRESS + FULL SCHEDULE]
+
+See you outside.
+
+— Legends Gym`
+    },
+    blog:{
+      title:"Fitness + Community: Why the Best Gyms Feel Like a Neighborhood",
+      outline:"The evolution of the gym as community space. Why people stay at gyms where they have relationships vs gyms with just equipment. How outdoor events build gym culture. What a Legends cookout actually looks like. How to find your fitness family. CTA: March 21 Spring Cookout."
+    }
+  },
+  {
+    name:"April", icon:"🐣", color:"#639922", bg:"#EAF3DE",
+    theme:"Easter Egg Hunt & Family Day",
+    event:{
+      name:"Legends Easter Egg Hunt + Family Fitness Day",
+      date:"April 19 (Saturday)",
+      desc:"Turn the gym, parking lot, and surrounding area into an Easter egg hunt course. Inside eggs: prizes, free class passes, Legends merch, fun dares, snack coupons. Families bring their kids for a morning that mixes movement with holiday fun. This event is a massive community builder that gets families in the door who would never come on a regular day.",
+      bullets:[
+        "Easter egg hunt across the gym and grounds — kids and adults",
+        "Eggs contain: prizes, Legends merch, fun fitness dares, snacks, and more",
+        "\"Bunny WOD\" — family-friendly workout before the hunt",
+        "Easter basket raffle — members bring a donated item to contribute",
+        "Photo spot with Easter decorations — bring the whole family",
+        "Post-hunt brunch spread — members bring a dish to share (potluck style)"
+      ]
+    },
+    ig:{
+      caption:`🐣 EASTER EGG HUNT AT LEGENDS — April 19!\n\nWe hid eggs. A lot of them. Inside the gym, outside the gym, everywhere.\n\nPrizes, Legends gear, fitness dares, snacks — all tucked inside. Bring your kids. Bring your family. Bring the chaos.\n\nStarts with a family-friendly Bunny WOD at 8am. Hunt kicks off at 9am. Brunch after.\n\nThis one is for the whole family 🐰\n\n📍 Legends Gym | April 19 | 8am–noon\n\nTag the family you're bringing 👇\n\n#EasterEggHunt #LegendsGym #Murrieta #FamilyFitness #EasterFun #CommunityEvent #BunnyWOD`,
+      visual:"Decorated gym teaser, egg hiding behind-the-scenes reel, family photo spot preview"
+    },
+    fb:{
+      caption:`🐣 EASTER EGG HUNT + FAMILY DAY — April 19 at Legends!\n\nWe're going all out this Easter.\n\nHere's the plan:\n🏋️ Bunny WOD — family-friendly workout at 8am\n🥚 Easter Egg Hunt kicks off at 9am (eggs hidden EVERYWHERE)\n🧺 Prizes inside eggs: Legends gear, fitness challenges, snacks & more\n📸 Easter photo spot set up all morning\n🥞 Potluck brunch after — bring a dish to share!\n\nOpen to the whole family — babies, toddlers, grandparents, everyone.\n\nShare with every family in Murrieta. This is the Easter event of the year.\n\n📍 Legends Gym | April 19 | 8am–Noon`,
+      visual:"Easter decorations, egg hunt graphic, family-friendly event images"
+    },
+    email:{
+      subject:"Easter Egg Hunt at Legends — bring the whole family 🐣",
+      body:`Hi [First Name],
+
+We hid over 200 eggs around the gym and we need help finding them.
+
+April 19 — Legends Easter Egg Hunt and Family Day.
+
+Here's what's happening:
+• 8:00am — Bunny WOD (family-friendly, kids encouraged)
+• 9:00am — Easter Egg Hunt begins (prizes, Legends gear, fun dares inside the eggs)
+• Potluck brunch after — bring a dish to share
+• Easter photo spot set up all morning for family pictures
+
+This is for your whole family. Grandparents, toddlers, teenagers, everyone. 
+
+Want to help hide eggs? Reply to this email — we need 10 volunteers the night before!
+
+[ADD TO CALENDAR — April 19, 8am]
+
+Happy Easter from the Legends family.
+
+— Legends Gym`
+    },
+    blog:{
+      title:"How Family Fitness Events Build Stronger Communities (And Stronger Families)",
+      outline:"The research on children who see parents exercise. How family-friendly gyms create multi-generational memberships. What Legends Family Day looks like from a parent's perspective. Making fitness a family value, not a solo chore. How to introduce kids to movement culture early. CTA: April 19 Easter event."
+    }
+  },
+  {
+    name:"May", icon:"👨‍👩‍👧", color:"#185FA5", bg:"#E6F1FB",
+    theme:"Mom & Dad Appreciation Month",
+    event:{
+      name:"\"Bring Your Mom\" Mother's Day WOD + Brunch",
+      date:"May 10 (Saturday — Mother's Day Weekend)",
+      desc:"A dedicated event where members bring their moms (or any mother figure) in for a special workout experience and brunch celebration. Moms train free. The class is designed to be accessible and fun — not intimidating. Every mom who attends gets treated like a legend. This event generates some of the most shareable content of the year.",
+      bullets:[
+        "Special Mother's Day WOD — modified so any fitness level can participate with their child",
+        "Every mom trains free as a guest",
+        "Post-workout brunch set up in the gym — members contribute dishes",
+        "\"Strongest Mom\" and \"Most Legendary Duo\" photo awards",
+        "Flowers or small gifts for every mom who attends",
+        "Members share on stories — @LegendsGym tag for a feature"
+      ]
+    },
+    ig:{
+      caption:`💐 BRING YOUR MOM TO LEGENDS — May 10\n\nYour mom carried you. The least you can do is carry a barbell next to her.\n\nMother's Day weekend we're running a special WOD designed for moms and their kids to do TOGETHER. Every mom trains free.\n\nBrunch after. Flowers for every mom who shows up. Guaranteed the best Mother's Day move you'll make.\n\n📍 Legends Gym | May 10 | 9am\n\nTag your mom 👇 (she'll love it or she'll pretend to)\n\n#MothersDay #BringYourMom #LegendsGym #Murrieta #MomWOD #FitnessFamily #MomLife`,
+      visual:"Heartfelt reel of member-mom pairs, brunch setup, flower delivery moment"
+    },
+    fb:{
+      caption:`💐 BRING YOUR MOM TO LEGENDS — May 10\n\nThis Mother's Day, give her something she'll actually talk about.\n\nWe're hosting a special Mother's Day WOD on May 10 — designed so any fitness level can participate alongside their child. Every mom trains free.\n\nAfter the workout:\n🍳 Potluck brunch — members bring a dish for the moms\n💐 Flowers for every mom who attends\n📸 Duo photo awards — best photos featured on our page\n\nBring your mom. Bring your mother-in-law. Bring the woman who raised you.\n\nThis is going to be a morning none of them forget.\n\n📍 Legends Gym | Saturday, May 10 | 9am`,
+      visual:"Mother's Day event graphic, warm community images, brunch setup"
+    },
+    email:{
+      subject:"Bring your mom to Legends this Saturday 💐",
+      body:`Hi [First Name],
+
+We have a Mother's Day plan and it's better than flowers and brunch alone.
+
+Saturday, May 10 — Bring Your Mom to Legends.
+
+We're running a special Mother's Day WOD designed for members and their moms to do side by side. No experience needed on her part. Just two people doing something hard and fun together.
+
+Every mom trains free.
+
+After the workout we're hosting a potluck brunch — bring a dish and celebrate the women who made us who we are.
+
+Every mom who attends gets flowers.
+
+Bring her. She will love it even if she complains the whole time.
+
+[RSVP — Let us know how many moms to expect]
+
+See you Saturday.
+
+— Legends Gym`
+    },
+    blog:{
+      title:"Exercising With Your Mom: Why It's One of the Best Things You'll Ever Do",
+      outline:"The health benefits of parent-child workouts. Emotional connection through shared physical challenge. What the science says about mothers and daughters exercising together. How movement becomes a family language. Stories from Legends members who trained with their moms. CTA: May 10 Mother's Day WOD."
+    }
+  },
+  {
+    name:"June", icon:"🌊", color:"#0F6E56", bg:"#E1F5EE",
+    theme:"Summer Kickoff Block Party",
+    event:{
+      name:"Legends Summer Block Party",
+      date:"June 21 (Saturday — First Day of Summer)",
+      desc:"Turn the parking lot into a full block party to kick off summer. Outdoor workout, music, food trucks, lawn games, and the whole neighborhood invited. Partner with 2–3 local businesses (food truck, local brand, kids activity vendor). This is Legends as a community anchor — not just a gym but a neighborhood institution.",
+      bullets:[
+        "Outdoor community WOD — two sessions, open to all",
+        "2–3 food truck partners on-site",
+        "Live music or DJ from a local artist",
+        "Lawn games tournament — cornhole, tug of war, relay races",
+        "Kids obstacle course zone",
+        "Local business pop-ups invited (Legends chooses aligned brands)",
+        "Family photos and community wall display"
+      ]
+    },
+    ig:{
+      caption:`🌊 LEGENDS SUMMER BLOCK PARTY — June 21\n\nFirst day of summer. We're going ALL OUT.\n\nFood trucks. Music. Outdoor WOD. Lawn games. Kids zone. The whole neighborhood.\n\nThis is Legends showing Murrieta what we're about.\n\nTwo morning workout sessions, then the party kicks off at noon and runs all afternoon.\n\n📍 Legends Gym + Parking Lot | June 21 | Workouts 8am & 10am | Party from Noon\n\nShare this everywhere. Bring everyone you know.\n\n#SummerBlockParty #LegendsGym #Murrieta #FirstDayOfSummer #CommunityEvent #SummerFitness #BlockParty`,
+      visual:"Block party hype reel, food truck teasers, kids zone preview, outdoor WOD setup"
+    },
+    fb:{
+      caption:`🌊 LEGENDS SUMMER BLOCK PARTY — June 21 — EVERYONE INVITED\n\nFirst day of summer and we're making it count.\n\nJoin us for the biggest community event of the summer:\n🏋️ Outdoor WOD — 8am and 10am (all fitness levels)\n🚚 Food Trucks on-site from noon\n🎵 Live music / DJ\n🎯 Lawn games tournament\n👶 Kids obstacle course\n🏪 Local vendor pop-ups\n\nFree to attend. Open to the entire community.\n\nShare this post and tag a Murrieta family who needs to be there. Let's make this the event of the summer.\n\n📍 Legends Gym | June 21 | Starting 8am`,
+      visual:"Block party event graphic, food truck and vendor partner tags"
+    },
+    email:{
+      subject:"The biggest Saturday of the summer is June 21 🌊",
+      body:`Hi [First Name],
+
+First day of summer. Here's the plan.
+
+Legends Summer Block Party — June 21.
+
+We're turning the parking lot into a full neighborhood block party and the whole community is invited.
+
+Morning:
+• 8am + 10am outdoor community WODs (open to all)
+
+From noon:
+• Food trucks on-site
+• Live music
+• Lawn games tournament
+• Kids obstacle course
+• Local vendor pop-ups
+
+Bring your family. Bring your neighbors. Share this email with anyone in Murrieta who'd want to be part of something like this.
+
+This is free. This is open. This is what community looks like.
+
+[FULL EVENT DETAILS + MAP]
+
+See you June 21.
+
+— Legends Gym`
+    },
+    blog:{
+      title:"What Makes a Gym a Community Hub? (And Why It Matters)",
+      outline:"The difference between a gym and a community. How Legends became a Murrieta institution. The research on belonging and fitness motivation. Why local business partnerships create stronger neighborhoods. How block parties build the culture that keeps members for years. CTA: June 21 Summer Block Party."
+    }
+  },
+  {
+    name:"July", icon:"🇺🇸", color:"#A32D2D", bg:"#FCEBEB",
+    theme:"Freedom WOD — 4th of July",
+    event:{
+      name:"Legends Freedom WOD — 4th of July Community Workout",
+      date:"July 4 (Friday) — 7am",
+      desc:"A public 4th of July workout tradition that gets stronger every year. Open to the entire community — members, non-members, families, neighbors. Patriotic energy, tough workout, community pride. Add a canned food drive for a local charity to root it in something bigger than fitness. This becomes an annual tradition people plan their holiday morning around.",
+      bullets:[
+        "Free public workout — 7am sharp, open to everyone",
+        "Patriotic themed WOD (coaches announce format day-of for surprise factor)",
+        "Dress code: red, white, and blue — prizes for best patriotic outfit",
+        "Canned food drive for local Murrieta food bank — bring a can, earn points",
+        "Post-workout breakfast social — members bring a dish",
+        "American flag group photo — submitted to local Murrieta community pages"
+      ]
+    },
+    ig:{
+      caption:`🇺🇸 LEGENDS FREEDOM WOD — July 4th, 7am\n\nStart your Independence Day the right way.\n\nFree community workout at Legends — open to everyone. Wear your red, white, and blue. Bring a canned food donation. Show up ready to work.\n\nThis is our favorite tradition and we want the whole neighborhood here.\n\n📍 Legends Gym | July 4th | 7:00am SHARP\n\nShare with every Murrieta patriot you know 🇺🇸\n\n#FreedomWOD #July4th #LegendsGym #Murrieta #IndependenceDay #CommunityFitness #PatrioticWorkout`,
+      visual:"Patriotic gym setup, coaches in red/white/blue, teaser of the workout format"
+    },
+    fb:{
+      caption:`🇺🇸 FREEDOM WOD — July 4th at 7am — FREE and OPEN TO ALL\n\nLegends is hosting our annual 4th of July community workout and the whole neighborhood is invited.\n\n⏰ 7:00am — We start ON TIME\n🇺🇸 Dress code: Red, White & Blue (prizes for best outfit)\n🥫 Bring a canned food donation for [Local Food Bank]\n🍳 Post-workout breakfast social\n\nThis is free. This is open. This is what July 4th mornings are made for.\n\nShare this with everyone in Murrieta. Make this the biggest Freedom WOD yet.\n\n[COMMENT 'FREEDOM' to get a reminder the morning of]`,
+      visual:"Patriotic event graphic, food bank partner logo, previous year photos if available"
+    },
+    email:{
+      subject:"Start July 4th at 7am with your Legends family 🇺🇸",
+      body:`Hi [First Name],
+
+There's no better way to start Independence Day.
+
+Legends Freedom WOD — July 4th, 7am.
+
+Every year this event gets bigger and more special. Free workout, open to everyone, community energy unlike any other day of the year.
+
+Here's what to know:
+• 7:00am start — be there a few minutes early
+• Wear red, white, and blue (prizes for best patriotic outfit)
+• Bring a canned food donation for [Murrieta Food Bank]
+• Post-workout breakfast social right after
+
+No registration needed. Just show up at 7am ready to work.
+
+Forward this to anyone you want to share your 4th of July morning with.
+
+[SAVE TO CALENDAR — July 4, 7am]
+
+Happy Independence Day from the entire Legends family.
+
+— Legends Gym`
+    },
+    blog:{
+      title:"Why Our Gym Does a Free Workout Every 4th of July (And Why You Should Come)",
+      outline:"The tradition of the Freedom WOD in the fitness community. What makes the July 4th workout different from any other day. The canned food drive partnership with local Murrieta organizations. Stories from members about how this morning became a family tradition. What to expect if it's your first time. CTA: July 4th, 7am."
+    }
+  },
+  {
+    name:"August", icon:"🎒", color:"#534AB7", bg:"#EEEDFE",
+    theme:"Back to School Family Bash",
+    event:{
+      name:"Back to School Family Bash",
+      date:"August 9 (Saturday)",
+      desc:"End-of-summer family celebration before school starts. Kids welcome, school supply drive for local schools, family team workouts, and a celebration of summer. Partner with a local school or teacher appreciation organization. This positions Legends as a family and community institution in a time when families are focused on their kids and their neighborhood.",
+      bullets:[
+        "Family team WOD — parents and kids compete together in a relay format",
+        "School supply drive — bring supplies for local Murrieta school donation",
+        "Backpack and supplies raffle for local families in need",
+        "\"Kids vs Parents\" fun relay race tournament",
+        "Face painting and activity stations for young kids",
+        "End-of-summer cookout after the workout"
+      ]
+    },
+    ig:{
+      caption:`🎒 BACK TO SCHOOL BASH AT LEGENDS — August 9\n\nSummer's almost over. Let's celebrate it right.\n\nFamily WOD. Kids vs Parents relay race. Face painting. End-of-summer cookout.\n\nWe're also collecting school supplies for local Murrieta students — bring something to donate and be part of giving back to our community.\n\nBring the whole family. This is the send-off summer deserves.\n\n📍 Legends Gym | August 9 | 9am–1pm\n\nTag your family 👇\n\n#BackToSchool #LegendsGym #Murrieta #FamilyFitness #EndOfSummer #CommunityEvent #KidsWOD`,
+      visual:"Family workout reel, kids relay race, school supply collection station"
+    },
+    fb:{
+      caption:`🎒 BACK TO SCHOOL BASH — August 9 at Legends\n\nOne last big Saturday before school takes over. Bring the whole family.\n\nWhat's happening:\n👨‍👩‍👧 Family Team WOD — parents and kids together\n🏃 Kids vs Parents Relay Race Tournament\n🎨 Face painting for the little ones\n🏫 School supply drive — bring donations for local Murrieta classrooms\n🔥 End-of-summer cookout\n\nFree community event. All families welcome.\n\nShare with every Murrieta family in your feed 🙏\n\n📍 Legends Gym | August 9 | 9am–1pm`,
+      visual:"Family event graphic, school supply drive poster, local school partner tag"
+    },
+    email:{
+      subject:"One last big summer Saturday — Back to School Bash, August 9 🎒",
+      body:`Hi [First Name],
+
+Before the school year takes over, let's do one more big one together.
+
+Legends Back to School Family Bash — August 9, 9am–1pm.
+
+This is for the whole family:
+• Family Team WOD — parents and kids working together
+• Kids vs Parents Relay Race (the kids always win — it's humiliating and amazing)
+• Face painting station for the young ones
+• School supply drive — bring new supplies to donate to Murrieta classrooms
+• End-of-summer cookout after
+
+This event is free and open to everyone. Bring neighbors, bring cousins, bring anyone with kids or kids at heart.
+
+[ADD TO CALENDAR — August 9, 9am]
+
+Let's end summer the Legends way.
+
+— Legends Gym`
+    },
+    blog:{
+      title:"Teaching Kids That Fitness Is Fun: A Parent's Guide to Starting Early",
+      outline:"The long-term impact of active childhood habits. How parent participation changes kids' relationship with fitness. What family workouts teach beyond physical fitness. How Legends creates a welcoming environment for families. The Back to School community tradition at Legends. CTA: August 9 Family Bash."
+    }
+  },
+  {
+    name:"September", icon:"🤝", color:"#0F6E56", bg:"#E1F5EE",
+    theme:"Bring a Friend Back — Referral Community Month",
+    event:{
+      name:"\"Bring a Friend\" Appreciation Weekend + Social Cookout",
+      date:"September 20 (Saturday)",
+      desc:"A full appreciation weekend focused on bringing someone new into the Legends community. Members bring a friend to experience a real class, then everyone gathers for a post-workout cookout. Members who bring a friend get a public shoutout and recognition. This is about celebrating the culture of invitation — no incentives needed when the experience speaks for itself.",
+      bullets:[
+        "Members bring any friend to any class all weekend — guest welcome",
+        "Saturday afternoon cookout — members, guests, and family all welcome",
+        "\"Who Brought You?\" wall — post photos of the member who invited each person",
+        "Coaches share appreciation for members who've built the community",
+        "Community appreciation awards — longest-attending members recognized",
+        "Group photo — the largest Legends family photo of the year"
+      ]
+    },
+    ig:{
+      caption:`🤝 BRING A FRIEND WEEKEND — September 20\n\nSomebody brought you here. Now it's your turn.\n\nThis weekend every member invites 1 person to come experience Legends for real — any class, any time. Saturday afternoon we're firing up the grill for a community cookout.\n\nThe \"Who Brought You?\" wall goes up — share your story and tag your person.\n\n📍 Legends Gym | September 20–21 | Cookout Saturday from 1pm\n\nTag who you're bringing 👇\n\n#BringAFriend #LegendsGym #Murrieta #CommunityWOD #FitnessFamily #GratitudeCookout`,
+      visual:"Who Brought You wall setup, member pairs, cookout prep reel"
+    },
+    fb:{
+      caption:`🤝 BRING A FRIEND WEEKEND — September 20–21\n\nThis is our favorite weekend of the fall.\n\nEvery member brings one person they've been meaning to introduce to Legends. You train together. You show them what you've found here.\n\nSaturday afternoon we're hosting a community cookout — members, guests, and families.\n\nWe're also putting up our \"Who Brought You?\" wall — photos of every member and the person who invited them into this community.\n\nThis community was built one invitation at a time. Keep building it.\n\nTag your person below. Plans are officially made.`,
+      visual:"Community appreciation event graphic, previous cookout photos, wall display"
+    },
+    email:{
+      subject:"Who's the person you've been meaning to invite? This weekend's the one 🤝",
+      body:`Hi [First Name],
+
+You know someone who belongs here.
+
+Maybe you've mentioned Legends to them. Maybe you've been meaning to bring them in. This weekend is that weekend.
+
+Bring a Friend Weekend — September 20 and 21.
+
+Bring anyone to any class any time this weekend. No forms, no process — just show up together.
+
+Saturday afternoon we're hosting a community cookout for members, their guests, and families. Good food, great people, and our "Who Brought You?" wall — where we celebrate every person who's ever invited someone into this community.
+
+That includes you.
+
+[VIEW WEEKEND CLASS SCHEDULE]
+
+See you Saturday.
+
+— Legends Gym`
+    },
+    blog:{
+      title:"The Ripple Effect: How One Invitation Built the Legends Community",
+      outline:"How community gyms grow through authentic invitation vs advertising. The story of how Legends members have brought in families, coworkers, and neighbors. The psychology of belonging — why being invited matters. How the 'Who Brought You?' tradition started. An honest look at what makes Legends different from a chain gym. CTA: September Bring a Friend Weekend."
+    }
+  },
+  {
+    name:"October", icon:"🎃", color:"#854F0B", bg:"#FAEEDA",
+    theme:"Trunk or Treat + Halloween Monster Mash",
+    event:{
+      name:"Legends Trunk or Treat + Monster Mash WOD",
+      date:"October 25 (Saturday)",
+      desc:"Two events in one legendary day. Morning: Monster Mash costume WOD — teams compete in Halloween gear. Afternoon: Trunk or Treat in the parking lot for the whole neighborhood. Members decorate their car trunks and kids from the community come through. This makes Legends THE Halloween destination for Murrieta families and creates the most viral social content of the year.",
+      bullets:[
+        "Morning: Monster Mash Team WOD — costumes required, teams of 4",
+        "Best costume judged by crowd — winner gets bragging rights + Legends gear",
+        "Afternoon: Trunk or Treat in the parking lot (2pm–5pm)",
+        "Members sign up to decorate their trunks — prizes for best decorated",
+        "Candy and treats for neighborhood kids",
+        "Hot chocolate and cider station",
+        "Haunted gym tour (coaches set up a spooky walkthrough)",
+        "Family costume photo station"
+      ]
+    },
+    ig:{
+      caption:`🎃 TRUNK OR TREAT + MONSTER MASH — October 25\n\nTwo legendary events. One incredible Saturday.\n\n🏋️ MORNING — Monster Mash Team WOD (costumes required, teams of 4, pure chaos in the best way)\n🚗 AFTERNOON — Trunk or Treat in our parking lot (2pm–5pm, open to ALL neighborhood kids)\n\nMembers: decorate your trunk and sign up. This is the day Legends becomes the Halloween capital of Murrieta.\n\nTag your team below 👻 Who are you coming as?\n\n📍 Legends Gym | October 25 | WOD starts 9am | Trunk or Treat 2–5pm\n\n#TrunkOrTreat #MonsterMash #LegendsGym #Murrieta #HalloweenWOD #CostumeWorkout #HalloweenMurrieta`,
+      visual:"Monster Mash costume WOD reel, trunk decorating behind-the-scenes, neighborhood kids teaser"
+    },
+    fb:{
+      caption:`🎃 TRUNK OR TREAT + MONSTER MASH — October 25 at Legends\n\nThe biggest Halloween event in Murrieta fitness? We think so.\n\nHere's the full day:\n\n👻 MORNING (9am–Noon)\n• Monster Mash Team WOD — costumes required, teams of 4\n• Best costume award — crowd vote\n• Haunted gym walkthrough\n\n🚗 AFTERNOON (2pm–5pm)\n• Trunk or Treat — open to ALL neighborhood kids and families\n• Members decorate their trunks (sign up in comments)\n• Best decorated trunk wins a prize\n• Hot chocolate, cider, and treats\n• Family costume photo station\n\nShare this with EVERY parent and family in Murrieta. This is the place to be October 25.\n\n[COMMENT if you want to set up a trunk — we'll send you sign-up details]`,
+      visual:"Halloween event graphic, trunk decoration inspiration, family-friendly imagery"
+    },
+    email:{
+      subject:"Trunk or Treat at Legends — bring the whole neighborhood 🎃",
+      body:`Hi [First Name],
+
+October 25 is going to be a day Murrieta remembers.
+
+Legends is hosting two events:
+
+MORNING — Monster Mash Team WOD (9am)
+Costumes required. Teams of 4. Coaches included in the chaos. Best costume wins. This is the most fun workout of the year — it's not even close.
+
+AFTERNOON — Trunk or Treat (2pm–5pm)
+Open to the entire neighborhood. Kids of all ages welcome. Members — we need you to sign up and decorate your trunk. This is how Legends becomes part of the fabric of Murrieta.
+
+We'll have hot chocolate, cider, candy, a haunted gym tour, and a family costume photo station.
+
+Want to participate in Trunk or Treat with your decorated trunk? Reply to this email or sign up at the link.
+
+[SIGN UP TO DECORATE A TRUNK]
+
+Share this email and our social posts with every parent you know. Let's make this huge.
+
+— Legends Gym`
+    },
+    blog:{
+      title:"How a CrossFit Box Became the Heart of Halloween in Our Community",
+      outline:"The story of Legends Trunk or Treat — how it started and how it grew. Why community events beyond fitness matter for gym culture. How Trunk or Treat puts Legends on the map for families who aren't yet members. The Monster Mash tradition and why costume workouts build loyalty. Tips for decorating your trunk. CTA: October 25."
+    }
+  },
+  {
+    name:"November", icon:"🦃", color:"#533808", bg:"#FAEEDA",
+    theme:"Turkey Burnout + Giving Back",
+    event:{
+      name:"Turkey Burnout WOD + Charity Drive",
+      date:"November 26 (Wednesday) — Two Sessions",
+      desc:"The pre-Thanksgiving community tradition that brings members, non-members, and families together for a workout before the feast. Add a canned food drive or toy drive (early for Christmas) to make it a giving event as well. Post the donations on social with the local charity partner tagged. This becomes a community tradition people schedule their Thanksgiving week around.",
+      bullets:[
+        "Two free community sessions: 5:30am and 6:30am (or 9am and 10:30am — adjust for your crowd)",
+        "Turkey-themed WOD announced the week before to build hype",
+        "Canned food drive for local Murrieta food bank — collection bins at the door",
+        "Holiday decor throughout the gym",
+        "Post-workout hot chocolate and cider station",
+        "Group photo — the whole pre-Thanksgiving Legends family",
+        "Members share 'what I'm grateful for at Legends' stories in the week leading up"
+      ]
+    },
+    ig:{
+      caption:`🦃 TURKEY BURNOUT — November 26 — Two Sessions\n\nWork before the feast. Legends tradition.\n\nTwo FREE community sessions open to EVERYONE. Bring a friend, bring your family, bring your Thanksgiving guests who need to work up an appetite.\n\nAlso — bring a canned food donation for [local food bank]. Let's give back this holiday season.\n\n📍 Legends Gym | November 26 | Sessions: 5:30am + 6:30am\n\nGobble gobble 🦃 Share with everyone who should be here.\n\n#TurkeyBurnout #LegendsGym #Murrieta #ThanksgivingWOD #CommunityFitness #GiveBack #FoodDrive`,
+      visual:"Turkey-themed gym decorations, canned food collection station, coaches in holiday gear"
+    },
+    fb:{
+      caption:`🦃 TURKEY BURNOUT — November 26 — FREE and OPEN TO ALL\n\nLegends Thanksgiving tradition is back.\n\nTwo free community sessions:\n⏰ 5:30am and 6:30am\n\nBring anyone — members, non-members, your visiting family, your neighbors.\n\n🥫 We're also collecting canned food donations for [Murrieta Food Bank]. Bring something and help us make a difference this season.\n\nHot chocolate after. Group photo. Gratitude everywhere.\n\nShare this with your Thanksgiving crew — make the workout part of the holiday tradition.\n\n[Comment 'GOBBLE' for a morning reminder on Nov 26]`,
+      visual:"Thanksgiving event graphic, food bank partner logo, warm community imagery"
+    },
+    email:{
+      subject:"Earn your Thanksgiving feast — Turkey Burnout is November 26 🦃",
+      body:`Hi [First Name],
+
+This is the Legends tradition we look forward to every year.
+
+Turkey Burnout — Wednesday, November 26.
+
+Two free community sessions open to everyone:
+• 5:30am
+• 6:30am
+
+Bring your family, your Thanksgiving guests, your friends from out of town. This workout is open to any fitness level and it's one of the most fun sessions of the year.
+
+We're also collecting canned food donations for [Murrieta Food Bank] — bring something and help us give back to the community that's given so much to us.
+
+Hot chocolate and cider after. Group photo. Gratitude.
+
+No registration needed — just show up.
+
+This week before Thanksgiving, we're sharing what we're grateful for on our social. Check our stories for member shoutouts all week.
+
+[FULL HOLIDAY SCHEDULE]
+
+Happy Thanksgiving from everyone at Legends. We are deeply grateful for this community.
+
+— The Legends Team`
+    },
+    blog:{
+      title:"The Turkey Burnout Tradition: Why Working Out on Thanksgiving Week Matters",
+      outline:"The history of fitness communities and holiday traditions. Why Thanksgiving week is one of the most important times to keep showing up. How Legends Turkey Burnout became a community landmark. The food bank partnership — giving back through fitness. What gratitude has to do with training hard. Member stories of their favorite Turkey Burnout memories. CTA: Nov 26."
+    }
+  },
+  {
+    name:"December", icon:"🎄", color:"#2B5EA7", bg:"#E6F1FB",
+    theme:"Christmas Party + Ugly Sweater WOD",
+    event:{
+      name:"Legends Christmas Party + Ugly Sweater WOD",
+      date:"December 13 (Saturday)",
+      desc:"The biggest party of the year. Ugly sweater workout in the morning, full Christmas party in the afternoon. Open to members, their families, and friends. Food, gifts, a toy drive, member appreciation, and a year-end celebration of everything Legends built together. This is the event that bonds the community for the year ahead and creates the social content that defines Legends going into the new year.",
+      bullets:[
+        "Morning: Ugly Sweater WOD — festive, all-levels, sweaters mandatory",
+        "Best ugly sweater voted by crowd — winner gets Legends gear + bragging rights",
+        "Full Christmas party in the afternoon — food, music, decorations",
+        "Toy drive for local Murrieta kids' charity — bring an unwrapped toy",
+        "Secret Santa among members (sign up the week before, $20 limit)",
+        "Year-end member shoutouts — coaches recognize milestones and moments",
+        "Holiday photo booth — decked out in full Christmas decor",
+        "Potluck contribution — everyone brings a holiday dish to share"
+      ]
+    },
+    ig:{
+      caption:`🎄 LEGENDS CHRISTMAS PARTY — December 13\n\nUgly sweaters. Actual Christmas party. The most wonderful time of the year at the best gym in Murrieta.\n\n🏋️ Morning: Ugly Sweater WOD (festive, all levels, sweaters REQUIRED)\n🎉 Afternoon: Full Christmas Party — food, music, Secret Santa, toy drive\n\nBring your family. Bring ugly sweaters. Bring a toy for our holiday toy drive for local kids.\n\nThis is how Legends ends the year. Together.\n\n📍 Legends Gym | December 13 | WOD 9am | Party from Noon\n\nTag your Legends crew 🎅\n\n#ChristmasParty #UglySweaterWOD #LegendsGym #Murrieta #HolidayFitness #ToyDrive #LegendsChristmas`,
+      visual:"Christmas-decorated gym preview, ugly sweater inspo reel, toy drive collection, party setup"
+    },
+    fb:{
+      caption:`🎄 LEGENDS CHRISTMAS PARTY — December 13 — YOU'RE ALL INVITED\n\nThis is the event of the year. Clear your Saturday.\n\n🧤 MORNING: Ugly Sweater WOD (9am–Noon)\n• Sweaters required — the uglier the better\n• Crowd-voted best sweater wins Legends gear\n• Festive all-levels workout\n\n🎉 AFTERNOON: Christmas Party (Noon onwards)\n• Potluck — bring a holiday dish to share\n• Secret Santa ($20 limit — sign up by Dec 6)\n• Toy drive for local Murrieta kids\n• Music, decorations, holiday photo booth\n• Year-end member appreciation and shoutouts\n\nBring your family, bring your friends, bring a toy to donate.\n\nThis is Legends at our best. Don't miss it.\n\n[Comment 'HO HO HO' to get Secret Santa sign-up info]`,
+      visual:"Christmas party event graphic, toy drive charity partner, ugly sweater inspiration"
+    },
+    email:{
+      subject:"You're invited to the Legends Christmas Party — December 13 🎄",
+      body:`Hi [First Name],
+
+This is our favorite day of the year and it's almost here.
+
+Legends Christmas Party — Saturday, December 13.
+
+Here's the full plan:
+
+MORNING — Ugly Sweater WOD (9am)
+Sweaters are mandatory. The uglier the better. Crowd votes for the best one — winner gets Legends gear and the honor of being the most festive person in the gym.
+
+AFTERNOON — Christmas Party (Noon onwards)
+• Potluck — bring a holiday dish to share
+• Secret Santa gift exchange (sign up by December 6 — $20 limit)
+• Toy drive — bring an unwrapped toy for local Murrieta kids in need
+• Holiday photo booth
+• Year-end member appreciation — coaches share their favorite moments and milestones
+
+Bring your family. Bring a friend. Bring an ugly sweater and a holiday dish.
+
+This community made 2025 something special. December 13 is how we celebrate it together.
+
+[SIGN UP FOR SECRET SANTA — closes December 6]
+
+[ADD TO CALENDAR — December 13, 9am]
+
+Merry Christmas from the entire Legends family.
+
+— The Legends Team`
+    },
+    blog:{
+      title:"A Year in the Life of Legends Gym: 12 Months of Community, Sweat, and Showing Up",
+      outline:"A look back at 2025 at Legends — the events, the milestones, the new members who became family. The philosophy behind Legends' community-first approach. Why holiday events matter for fitness culture. What makes December different at Legends vs a commercial gym. A preview of what's coming in 2026. CTA: December 13 Christmas Party — and join us in January."
+    }
+  }
+];
+
+const tabLabels = [
+  {key:"event", label:"📅 Event"},
+  {key:"ig", label:"📸 Instagram"},
+  {key:"fb", label:"👥 Facebook"},
+  {key:"email", label:"✉️ Email"},
+  {key:"blog", label:"📝 Blog"}
+];
+
+function esc(str) {
+  return str.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+}
+
+function renderMonth(idx) {
+  const m = months[idx];
+  const tabsHtml = tabLabels.map((t,i) =>
+    `<button class="tab${i===0?' active':''}" onclick="switchTab(${idx},${i},'${t.key}')">${t.label}</button>`
+  ).join('');
+
+  const eventHtml = `
+    <div class="tab-content active" id="tc-${idx}-event">
+      <div class="event-box">
+        <div class="event-name">${m.event.name}</div>
+        <div class="event-date">📅 ${m.event.date}</div>
+        <div class="event-desc">${m.event.desc}</div>
+        <ul class="event-bullets">${m.event.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+      </div>
+    </div>`;
+
+  const igText = m.ig.caption;
+  const igHtml = `
+    <div class="tab-content" id="tc-${idx}-ig">
+      <div class="post-box">
+        <div class="platform-label ig-label">📸 Instagram Caption + Visual Direction</div>
+        <div class="post-text" id="ig-text-${idx}">${igText.replace(/</g,'&lt;')}</div>
+        <div class="visual-hint">Visual: ${m.ig.visual}</div>
+        <button class="copy-btn" onclick="copyById('ig-text-${idx}',this)">⧉ Copy Caption</button>
+      </div>
+    </div>`;
+
+  const fbText = m.fb.caption;
+  const fbHtml = `
+    <div class="tab-content" id="tc-${idx}-fb">
+      <div class="post-box">
+        <div class="platform-label fb-label">👥 Facebook Post</div>
+        <div class="post-text" id="fb-text-${idx}">${fbText.replace(/</g,'&lt;')}</div>
+        <div class="visual-hint">Visual: ${m.fb.visual}</div>
+        <button class="copy-btn" onclick="copyById('fb-text-${idx}',this)">⧉ Copy Post</button>
+      </div>
+    </div>`;
+
+  const emailFull = `Subject: ${m.email.subject}\n\n${m.email.body}`;
+  const emailHtml = `
+    <div class="tab-content" id="tc-${idx}-email">
+      <div class="post-box">
+        <div class="platform-label em-label">✉️ Email — Copy Subject + Full Body</div>
+        <div class="email-subject">Subject: ${m.email.subject}</div>
+        <div class="post-text" id="email-text-${idx}">${m.email.body.replace(/</g,'&lt;')}</div>
+        <button class="copy-btn" onclick="copyFull(${idx},this)">⧉ Copy Full Email</button>
+      </div>
+    </div>`;
+
+  const blogHtml = `
+    <div class="tab-content" id="tc-${idx}-blog">
+      <div class="post-box">
+        <div class="platform-label bl-label">📝 Blog Post Brief</div>
+        <div class="blog-title">${m.blog.title}</div>
+        <div class="blog-outline">${m.blog.outline}</div>
+        <button class="copy-btn" onclick="copyBlog(${idx},this)">⧉ Copy Blog Brief</button>
+      </div>
+    </div>`;
+
+  return `
+    <div class="month-card">
+      <div class="month-header">
+        <div class="month-badge" style="background:${m.bg}">${m.icon}</div>
+        <div>
+          <div class="month-title">${m.name}</div>
+          <div class="month-theme">${m.theme}</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="tabs">${tabsHtml}</div>
+        ${eventHtml}${igHtml}${fbHtml}${emailHtml}${blogHtml}
+      </div>
+    </div>`;
+}
+
+function switchTab(monthIdx, tabIdx, key) {
+  const keys = ['event','ig','fb','email','blog'];
+  keys.forEach(k => {
+    const el = document.getElementById(`tc-${monthIdx}-${k}`);
+    if(el) el.classList.toggle('active', k === key);
+  });
+  const card = document.getElementById('monthContent').querySelector('.month-card');
+  if(card) card.querySelectorAll('.tab').forEach((btn,i) => btn.classList.toggle('active', i === tabIdx));
+}
+
+function copyById(id, btn) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function copyFull(idx, btn) {
+  const subj = document.getElementById(`monthContent`).querySelector('.email-subject');
+  const body = document.getElementById(`email-text-${idx}`);
+  if(!subj || !body) return;
+  const full = subj.innerText + '\n\n' + body.innerText;
+  navigator.clipboard.writeText(full).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function copyBlog(idx, btn) {
+  const card = document.getElementById('monthContent').querySelector('.month-card');
+  const title = card.querySelector('.blog-title');
+  const outline = card.querySelector('.blog-outline');
+  if(!title || !outline) return;
+  const full = 'Blog Title: ' + title.innerText + '\n\nOutline:\n' + outline.innerText;
+  navigator.clipboard.writeText(full).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+const nav = document.getElementById('monthNav');
+months.forEach((m, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'nav-btn' + (i===0?' active':'');
+  btn.textContent = m.icon + ' ' + m.name;
+  btn.onclick = () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('monthContent').innerHTML = renderMonth(i);
+  };
+  nav.appendChild(btn);
+});
+
+document.getElementById('monthContent').innerHTML = renderMonth(0);
+</script>
